@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +22,7 @@ func (s *ShoutRequest) Process() {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/V1/SHOUT", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("POST /V1/SHOUT %v", r.RemoteAddr)
 		if r.Header.Get("Content-Type") != "application/json" {
 			http.Error(w, "Bad Request", http.StatusBadRequest)
 			return
@@ -31,7 +31,7 @@ func main() {
 		var shout ShoutRequest
 		err := decoder.Decode(&shout)
 		if err != nil {
-			fmt.Printf("Error json decoding: %v", r.Body)
+			log.Printf("Error json decoding: %v", r.Body)
 			http.Error(w, "Bad Request", http.StatusBadRequest)
 			return
 		}
@@ -54,5 +54,6 @@ func main() {
 	if port == "" {
 		port = "5000"
 	}
+	log.Printf("Listening on %v", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
