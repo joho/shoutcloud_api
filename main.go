@@ -24,7 +24,7 @@ func (s *ShoutRequest) Process() {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/V1/SHOUT", ShoutBack).Methods("POST")
-	r.HandleFunc("/V1/FUCK_OFF", FuckOff).Methods("POST")
+	r.PathPrefix("/V1/FUCK_OFF").HandlerFunc(FuckOff).Methods("GET")
 	http.Handle("/", r)
 
 	port := os.Getenv("PORT")
@@ -68,11 +68,12 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 	pathSegments := strings.Split(r.URL.Path, "/")
 
 	// TODO off by one?
-	foArgs := path.Join(pathSegments[2:len(pathSegments)]...)
-	host := "http://foaas.com"
+	foArgs := path.Join(pathSegments[3:len(pathSegments)]...)
+	host := "http://foaas.com/"
 
 	// create foaas request
-	resp, err := http.Get(host + foArgs)
+	url := host + foArgs
+	resp, err := http.Get(url)
 	defer resp.Body.Close()
 	if err != nil {
 		log.Printf("foaas upstream error: %v", err)
@@ -80,7 +81,7 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respBody, err := ioutil.ReadAll(r.Body)
+	respBody, err := ioutil.ReadAll(resp.Body)
 	shoutyFuckOff := strings.ToUpper(string(respBody))
 
 	// write response
