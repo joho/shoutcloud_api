@@ -64,16 +64,19 @@ func ShoutBack(w http.ResponseWriter, r *http.Request) {
 }
 
 func FuckOff(w http.ResponseWriter, r *http.Request) {
-	// take path to right of /FUCK_OFF (query string?)
+	// take path to right of /FUCK_OFF (TODO query string?)
 	pathSegments := strings.Split(r.URL.Path, "/")
 
-	// TODO off by one?
 	foArgs := path.Join(pathSegments[3:len(pathSegments)]...)
 	host := "http://foaas.com/"
 
 	// create foaas request
 	url := host + foArgs
-	resp, err := http.Get(url)
+	req, _ := http.NewRequest("GET", url, nil)
+	if r.Header.Get("Accept") != "" {
+		req.Header.Set("Accept", r.Header.Get("Accept"))
+	}
+	resp, err := http.DefaultClient.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
 		log.Printf("foaas upstream error: %v", err)
@@ -82,6 +85,7 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respBody, err := ioutil.ReadAll(resp.Body)
+	// TODO don't shout the case senstive things like asset paths
 	shoutyFuckOff := strings.ToUpper(string(respBody))
 
 	// write response
