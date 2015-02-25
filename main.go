@@ -38,8 +38,12 @@ func main() {
 func ShoutBack(w http.ResponseWriter, r *http.Request) {
 	log.Printf("POST /V1/SHOUT %v", r.RemoteAddr)
 
-	if r.Header.Get("Content-Type") != "application/json" {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+	if !(r.Header.Get("Content-Type") != "application/json" &&
+		r.Header.Get("Content-Type") != "APPLICATION/JSON" &&
+		r.Header.Get("CONTENT-TYPE") != "application/json" &&
+		r.Header.Get("CONTENT-TYPE") != "APPLICATION/JSON") {
+
+		http.Error(w, "BAD REQUEST", http.StatusBadRequest)
 		return
 	}
 	decoder := json.NewDecoder(r.Body)
