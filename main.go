@@ -31,7 +31,7 @@ func main() {
 	if port == "" {
 		port = "5000"
 	}
-	log.Printf("Listening on %v", port)
+	log.Printf("LISTENING ON %v", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -46,8 +46,8 @@ func ShoutBack(w http.ResponseWriter, r *http.Request) {
 	var shout ShoutRequest
 	err := decoder.Decode(&shout)
 	if err != nil {
-		log.Printf("Error json decoding: %v", r.Body)
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Printf("ERROR JSON DECODING: %v", r.Body)
+		http.Error(w, "BAD REQUEST", http.StatusBadRequest)
 		return
 	}
 
@@ -59,7 +59,7 @@ func ShoutBack(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("CONTENT-TYPE", "APPLICATION/JSON")
 	w.Write(json)
 }
 
@@ -79,8 +79,8 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.DefaultClient.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
-		log.Printf("foaas upstream error: %v", err)
-		http.Error(w, "Bad Upstream Service", http.StatusBadGateway)
+		log.Printf("FOAAS UPSTREAM ERROR: %v", err)
+		http.Error(w, "BAD UPSTREAM SERVICE", http.StatusBadGateway)
 		return
 	}
 
