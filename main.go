@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -22,6 +23,8 @@ func (s *ShoutRequest) Process() {
 }
 
 func main() {
+	go periodicallyPingShoutcloudPro()
+
 	r := mux.NewRouter()
 	r.HandleFunc("/V1/SHOUT", ShoutBack).Methods("POST")
 	r.PathPrefix("/V1/FUCK_OFF").HandlerFunc(FuckOff).Methods("GET")
@@ -95,4 +98,18 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 	// write response
 	w.WriteHeader(resp.StatusCode)
 	w.Write([]byte(shoutyFuckOff))
+}
+
+func periodicallyPingShoutcloudPro() {
+	for {
+		resp, err := http.Get("http://pro.shoutcloud.io/PING")
+		if err != nil {
+			log.Println("Error pinging shoutcloud: %v", err)
+		}
+		if resp.StatusCode != 200 {
+			log.Println("Error pinging shoutcloud with status: %v", resp.StatusCode)
+		}
+
+		time.Sleep(77 * time.Second)
+	}
 }
