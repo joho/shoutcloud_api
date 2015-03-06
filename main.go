@@ -104,10 +104,10 @@ func periodicallyPingShoutcloudPro() {
 	for {
 		resp, err := http.Get("http://pro.shoutcloud.io/PING")
 		if err != nil {
-			log.Println("Error pinging shoutcloud: %v", err)
+			log.Printf("Error pinging shoutcloud: %v", err)
 		}
 		if resp.StatusCode != 200 {
-			log.Println("Error pinging shoutcloud with status: %v", resp.StatusCode)
+			log.Printf("Error pinging shoutcloud with status: %v", resp.StatusCode)
 		}
 
 		time.Sleep(77 * time.Second)
