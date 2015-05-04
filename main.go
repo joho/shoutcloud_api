@@ -74,7 +74,7 @@ func FuckOff(w http.ResponseWriter, r *http.Request) {
 	// take path to right of /FUCK_OFF (TODO query string?)
 	pathSegments := strings.Split(r.URL.Path, "/")
 
-	foArgs := path.Join(pathSegments[3:len(pathSegments)]...)
+	foArgs := path.Join(pathSegments[3:]...)
 	host := "http://foaas.com/"
 
 	// create foaas request
