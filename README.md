@@ -11,4 +11,4 @@ curl -X POST -d '{"INPUT": "hello world"}' -H 'Content-Type: application/json' h
 http://shoutcloud.io
 
 ---
-&copy; [JOHN BARTON](http://whoisjohnbarton.com)
+&copy; [JOHN BARTON](https://johnbarton.co/)
